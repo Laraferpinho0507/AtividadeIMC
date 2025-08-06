@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0F0F23;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            font-size: 16px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-box h3 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .imc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .imc-table th,
+        .imc-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .imc-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 12px;
+        }
+
+        .imc-table tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .peso-adequado {
+            background: rgba(39, 174, 96, 0.2) !important;
+            font-weight: 600;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+
+            .header-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .imc-table {
+                font-size: 11px;
+            }
+
+            .imc-table th,
+            .imc-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="header-icon">⚕️</div>
+        <h1>Calculadora IMC</h1>
+        <p class="subtitle">Descubra seu Índice de Massa Corporal</p>
+        
+        <div class="form-container">
+            <form action="/calcular-imc" method="POST" id="imcForm">
+                <div class="form-group">
+                    <label for="nome">👤 Nome Completo <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="altura">📏 Altura (metros) <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <input type="number" id="altura" name="altura" step="0.01" min="0.5" max="2.5" required placeholder="Ex: 1.75">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="peso">⚖️ Peso (kg) <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <input type="number" id="peso" name="peso" step="0.1" min="20" max="300" required placeholder="Ex: 70.5">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-submit">Calcular Meu IMC</button>
+            </form>
+        </div>
+        <div class="info-box">
+            <h3>📋 Classificação do IMC</h3>
+            <table class="imc-table">
+                <thead>
+                    <tr>
+                        <th>Faixa IMC</th>
+                        <th>Classificação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>< 16,0</td>
+                        <td>Baixo peso (grau I)</td>
+                    </tr>
+                    <tr>
+                        <td>16,0 - 16,99</td>
+                        <td>Baixo peso (grau II)</td>
+                    </tr>
+                    <tr>
+                        <td>17,0 - 18,49</td>
+                        <td>Baixo peso (grau III)</td>
+                    </tr>
+                    <tr class="peso-adequado">
+                        <td>18,5 - 24,99</td>
+                        <td>Peso Adequado ✨</td>
+                    </tr>
+                    <tr>
+                        <td>25,0 - 29,99</td>
+                        <td>Sobrepeso</td>
+                    </tr>
+                    <tr>
+                        <td>30,0 - 34,99</td>
+                        <td>Obesidade (grau I)</td>
+                    </tr>
+                    <tr>
+                        <td>35,0 - 39,99</td>
+                        <td>Obesidade (grau II)</td>
+                    </tr>
+                    <tr>
+                        <td>≥ 40,0</td>
+                        <td>Obesidade (grau III)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Validação adicional no frontend
+        document.getElementById('imcForm').addEventListener('submit', function(e) {
+            const nome = document.getElementById('nome').value.trim();
+            const altura = parseFloat(document.getElementById('altura').value);
+            const peso = parseFloat(document.getElementById('peso').value);
+            
+            if (!nome) {
+                alert('⚠️ Por favor, digite seu nome!');
+                e.preventDefault();
+                return;
+            }
+            
+            if (altura < 0.5 || altura > 2.5) {
+                alert('⚠️ Altura deve estar entre 0.5m e 2.5m!');
+                e.preventDefault();
+                return;
+            }
+            
+            if (peso < 20 || peso > 300) {
+                alert('⚠️ Peso deve estar entre 20kg e 300kg!');
+                e.preventDefault();
+                return;
+            }
+        });
+    </script>
+</body>
+</html>

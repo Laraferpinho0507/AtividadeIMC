@@ -1,0 +1,29 @@
+{
+  "name": "calculadora-imc",
+  "version": "1.0.0",
+  "description": "Servidor Node.js para calcular IMC (Índice de Massa Corporal)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "imc",
+    "nodejs",
+    "express",
+    "body-parser",
+    "calculadora"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
